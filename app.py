@@ -5,7 +5,7 @@ import pandas as pd
 
 def saveData(data, valor, modoPagamento, descricaoPagamento, categoria):
     
-    file_exists =  os.path.isfile("despesas.csv")
+    file_exists =  os.path.isfile("Bases/despesas.csv")
 
     dataNovo = data.strftime('%Y/%m/%d')
 
