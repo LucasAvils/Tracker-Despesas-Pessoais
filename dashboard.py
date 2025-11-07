@@ -1,45 +1,15 @@
 import streamlit as st
-import csv
-import os
 import pandas as pd
-
-def saveData(data, valor, modoPagamento, descricaoPagamento, categoria):
-    
-    file_exists =  os.path.isfile("Bases/despesas.csv")
-
-    dataNovo = data.strftime('%Y/%m/%d')
-
-    with open("despesas.csv",mode = 'a',newline='',encoding='utf-8') as file:
-        
-        writer = csv.writer(file)
-        if not file_exists:
-            writer.writerow(["Data", "Valor", "Modo de Pagamento", "Descrição do Pagamento", "Categoria"])
-
-        writer.writerow([dataNovo, valor, modoPagamento, descricaoPagamento, categoria])
-
-    st.success("Despesa adicionada com sucesso!")
-
-def handle_submit(data,valor,modoPagamento,descricaoPagamento,categoria):
-    if data and valor and modoPagamento and descricaoPagamento and categoria:
-            saveData(data, valor, modoPagamento, descricaoPagamento, categoria)
-            
-    else:
-        st.warning("Por favor, preencha todos os campos.")
-
-with st.form("form_despesas",clear_on_submit=True):
-    st.write("Despesas")
-    data = st.date_input("Selecione uma data", value="today",key="Data",format='DD/MM/YYYY')
-    valor = st.number_input("Insira o valor:",format="%0.2f",value=None, key="Valor")
-    modoPagamento = st.selectbox("Selecione a forma de pagamento",options=["Débito/Pix","Crédito"],index=None, key="ModoPagamento")
-    descricaoPagamento = st.text_input("Descrição da despesa",key="DescricaoPagamento")
-    categoria = st.selectbox("Selecione a categoria", options=["Lazer/Vontades","Necessidades","Investimentos"], index=None,key="Categoria")
-    
-    submitted = st.form_submit_button("Adicionar despesa")
-    if submitted:
-        handle_submit(data, valor, modoPagamento, descricaoPagamento, categoria)
+import dbconnect as db
 
 
-df = pd.read_csv("despesas.csv")
+conn = db.connect_db()
+cursor = db.get_cursor(conn)
+
+query = "SELECT data AS 'Data', valor AS 'Valor', modo_pagamento AS 'Modo de Pagamento', descricao_pagamento AS 'Descrição do Pagamento', categoria AS 'Categoria' FROM despesas"
+
+df = db.pandas_query(query)
+
 
 config = {"Data": st.column_config.DateColumn("Data", format="DD/MM/YYYY"),
           "Valor": st.column_config.NumberColumn("Valor", format="R$%.2f")}
@@ -61,12 +31,19 @@ df['Valor'] = pd.to_numeric(df['Valor'])
 dfAno = df[df['Data'].dt.year == ano]
 dfMês = dfAno[dfAno['Data'].dt.month == dicMesDia[mes]]
 
+df['Data'] = pd.to_datetime(df['Data'])
+df['Valor'] = pd.to_numeric(df['Valor'])
+
+dfAno = df[df['Data'].dt.year == ano]
+dfMês = dfAno[dfAno['Data'].dt.month == dicMesDia[mes]]
+
 
 sumCategoria = dfMês.groupby('Categoria')['Valor'].sum().reset_index()
 
 
 st.dataframe(dfMês,column_config=config, hide_index=True)
 st.dataframe(sumCategoria,column_config=config,hide_index=True)
+
 
 tab1, tab2 = st.tabs([f"Gráfico de despesas por mês em {ano}",f"Gráfico de Investimentos por mês em {ano}"])
 
@@ -89,6 +66,3 @@ with tab2:
     dfInvestimentosSum = dfInvestimentos["Valor"].sum()
     int(dfInvestimentosSum)
     st.markdown(f"**Total Investido no ano de {ano}: R$ {dfInvestimentosSum:.2f}**")
-
-
-

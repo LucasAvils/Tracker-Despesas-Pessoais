@@ -1,13 +1,12 @@
 import sqlite3
+import pandas as pd
 
 def connect_db():
     conn =  sqlite3.connect('database/despesas-pessoais')
-    cur =  conn.cursor()
-    return cur
+    return conn
 
 def create_table_despesas(cursor):
     cursor.execute('''CREATE TABLE IF NOT EXISTS despesas (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
                         data TEXT NOT NULL,
                         valor REAL NOT NULL,
                         modo_pagamento TEXT NOT NULL,
@@ -23,10 +22,26 @@ def insert_despesa(cursor, data, valor, modo_pagamento, descricao_pagamento, cat
                 ''', (data, valor, modo_pagamento, descricao_pagamento, categoria))
 
     cursor.connection.commit()
-    
+
+def fetch_despesas(cursor):
+    cursor.execute('SELECT * FROM despesas')
+    return cursor.fetchall()
+
+def close_connection(cursor):
+    cursor.connection.close()
+
+def pandas_query(query):
+    conn =  sqlite3.connect('database/despesas-pessoais')
+    return pd.read_sql_query(query, conn)
+
+def get_cursor(conn):
+    return conn.cursor()
 
 if __name__ == '__main__':
-    cursor = connect_db()
+    conn = connect_db()
+    cursor = get_cursor()
     create_table_despesas(cursor)
     insert_despesa(cursor, '2024-06-01', 100.0, 'Cartão de Crédito', 'Compra no supermercado', 'Alimentação')
+    close_connection(cursor)
+    print(fetch_despesas(cursor))
     
