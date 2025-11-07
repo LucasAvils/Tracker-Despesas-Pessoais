@@ -1,2 +1,5 @@
 .env
 .csv
+/database
+__pycache__
+.vscode
