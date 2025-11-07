@@ -27,6 +27,10 @@ def fetch_despesas(cursor):
     cursor.execute('SELECT * FROM despesas')
     return cursor.fetchall()
 
+def fetch_meta(cursor):
+    cursor.execute('SELECT * FROM meta')
+    return cursor.fetchall()
+
 def close_connection(cursor):
     cursor.connection.close()
 
