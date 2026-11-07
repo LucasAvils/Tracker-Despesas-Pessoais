@@ -6,12 +6,7 @@ from .. import dbconnect
 # Roteador com prefixo '/despesas' e agrupamento para o Swagger
 router = APIRouter(prefix="/despesas", tags=["Despesas"])
 
-# Listar categorias
-@router.get("/categorias", response_model=List[CategoriaResponse])
-def listar_categorias(db=Depends(dbconnect.get_db)):
-    cursor = db.cursor()
-    cursor.execute("SELECT id,nome,meta_gastos FROM categoria")
-    return [dict(row) for row in cursor.fetchall()]
+
 
 # Listar despesas com filtros opcionais de ano e mês
 @router.get("/", response_model=List[DespesasResponse])
