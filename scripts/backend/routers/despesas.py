@@ -6,8 +6,6 @@ from .. import dbconnect
 # Roteador com prefixo '/despesas' e agrupamento para o Swagger
 router = APIRouter(prefix="/despesas", tags=["Despesas"])
 
-
-
 # Listar despesas com filtros opcionais de ano e mês
 @router.get("/", response_model=List[DespesasResponse])
 def listar_despesas(ano: Optional[int] = None, mes: Optional[int] = Query(None, ge=1, le=12), db=Depends(dbconnect.get_db)):
@@ -50,3 +48,5 @@ def deletar_despesas(id: int, db=Depends(dbconnect.get_db)):
     else:
         db.commit()
         return {"mensagem": "Despesa deletada com sucesso"}
+
+
