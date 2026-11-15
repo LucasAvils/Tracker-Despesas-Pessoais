@@ -25,3 +25,48 @@ class DespesasCreate(BaseModel):
     descricao: Optional[str] = None
     forma_pagamento_id: int
     categoria_id: int
+
+class GastosMensaisResponse(BaseModel):
+    id: int
+    nome: str
+    valor_estimado: float
+    dia_vencimento: str
+    categoria_id: int
+    forma_pagamento_id: int
+
+class GastosMensaisCreate(BaseModel):
+    nome: str
+    valor_estimado: float
+    dia_vencimento: int
+    categoria_id: int
+    forma_pagamento_id: int
+
+class MetasCreate(BaseModel):
+    nome: str
+    valor_alvo: float
+    valor_atual: float
+    data_limite: Optional[str] = None
+
+class MetasResponse(BaseModel):
+    id: int
+    nome: str
+    valor_alvo: float
+    valor_atual: float
+    data_limite: Optional[str] = None
+
+class MetasCreate(BaseModel):
+    nome: str
+    valor_alvo: float
+    valor_atual: float
+    data_limite: Optional[str] = None
+
+class RendaResponse(BaseModel):
+    id: int
+    descricao: str
+    valor: float
+    data: str
+
+class RendaCreate(BaseModel):
+    descricao: str
+    valor: float
+    data: str

@@ -1,73 +1,102 @@
-/* Estilos personalizados para o Frontend de Despesas Pessoais */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+/* ============================================================
+   Despesas Pessoais — Global Styles (Dark + Glass)
+   ============================================================ */
 
-:root {
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-}
+[v-cloak] { display: none; }
 
-body {
-    font-family: var(--font-sans);
-    background-color: #0b0f19;
-    color: #f1f5f9;
-}
+/* Scrollbar personalizada */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0a0a0f; }
+::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #334155; }
 
-/* Scrollbar refinada */
-::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-}
-::-webkit-scrollbar-track {
-    background: #0f172a;
-}
-::-webkit-scrollbar-thumb {
-    background: #334155;
-    border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+/* Glass card base */
+.glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-/* Animações suaves */
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.2s ease, transform 0.2s ease;
+/* Glass hover para cards interativos */
+.glass-hover {
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
 }
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-    transform: scale(0.98);
-}
-
-/* ApexCharts customização no tema escuro */
-.apexcharts-canvas {
-    margin: 0 auto;
-}
-.apexcharts-tooltip {
-    background: #1e293b !important;
-    border: 1px solid #334155 !important;
-    color: #f8fafc !important;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important;
-    border-radius: 8px !important;
-}
-.apexcharts-tooltip-title {
-    background: #0f172a !important;
-    border-bottom: 1px solid #334155 !important;
-    font-weight: 600 !important;
+.glass-hover:hover {
+    background: rgba(255, 255, 255, 0.055);
+    border-color: rgba(255, 255, 255, 0.12);
+    transform: translateY(-1px);
 }
 
 /* Badges de categoria */
-.badge-lazer {
-    background-color: rgba(245, 158, 11, 0.15);
-    color: #fbbf24;
-    border: 1px solid rgba(245, 158, 11, 0.3);
+.badge-lazer          { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+.badge-necessidades   { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); }
+.badge-investimentos  { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+
+/* Glow sutil nos KPI cards */
+.kpi-glow-rose    { box-shadow: 0 0 24px -8px rgba(239,68,68,0.3); }
+.kpi-glow-emerald { box-shadow: 0 0 24px -8px rgba(16,185,129,0.3); }
+.kpi-glow-blue    { box-shadow: 0 0 24px -8px rgba(59,130,246,0.3); }
+.kpi-glow-purple  { box-shadow: 0 0 24px -8px rgba(139,92,246,0.3); }
+.kpi-glow-amber   { box-shadow: 0 0 24px -8px rgba(245,158,11,0.3); }
+
+/* Section divider */
+.section-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1rem;
 }
-.badge-necessidades {
-    background-color: rgba(59, 130, 246, 0.15);
-    color: #60a5fa;
-    border: 1px solid rgba(59, 130, 246, 0.3);
+.section-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255,255,255,0.08), transparent);
 }
-.badge-investimentos {
-    background-color: rgba(16, 185, 129, 0.15);
-    color: #34d399;
-    border: 1px solid rgba(16, 185, 129, 0.3);
+
+/* Noise overlay — adiciona textura sutil */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
 }
+
+/* Gradient bg spots */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background:
+        radial-gradient(ellipse 60% 40% at 10% 15%, rgba(16,185,129,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 35% at 90% 80%, rgba(59,130,246,0.05) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+/* Table row transitions */
+tbody tr { transition: background 0.15s; }
+
+/* Input date color fix for dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.6);
+    cursor: pointer;
+}
+
+/* Smooth scroll */
+html { scroll-behavior: smooth; }
+
+/* Fade-in para seções */
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+main > section {
+    animation: fadeUp 0.4s ease both;
+}
+main > section:nth-child(2) { animation-delay: 0.05s; }
+main > section:nth-child(3) { animation-delay: 0.10s; }
+main > section:nth-child(4) { animation-delay: 0.15s; }
+main > section:nth-child(5) { animation-delay: 0.20s; }

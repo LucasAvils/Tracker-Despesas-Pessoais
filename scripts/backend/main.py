@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from .routers import despesas
+from .routers import despesas,categorias,gastos_mensais,metas,renda
 
 # Instância principal da aplicação
 app = FastAPI(title="API de Despesas Pessoais")
@@ -15,4 +15,7 @@ app.add_middleware(
 
 # Registro dos roteadores modulares
 app.include_router(despesas.router)
-
+app.include_router(categorias.router)
+app.include_router(gastos_mensais.router)
+app.include_router(metas.router)
+app.include_router(renda.router)
